@@ -1,0 +1,12 @@
+.git
+node_modules
+.env
+.secrets
+private
+private-data
+reports
+*.dpapi
+*.pem
+*.apk
+*.apks
+*.zip

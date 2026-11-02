@@ -1,0 +1,80 @@
+syntax = "proto3";
+package fr24.feed.api.v1;
+
+// Wire-compatible subset recovered from the supplied APK, NOT an official SDK.
+// Sources: sr/m0.java (request), r0.java (bounds), o1.java (settings),
+// n0.java (response), z.java (flight), w.java (extra info), r.java (source enum).
+// Unrepresented fields are skipped by the standard protobuf decoder.
+service Feed { rpc LiveFeed(LiveFeedRequest) returns (LiveFeedResponse); }
+message Bounds { float north = 1; float south = 2; float west = 3; float east = 4; }
+message FieldMask { repeated string paths = 1; }
+message Route { string from = 1; string to = 2; string divertedTo = 3; }
+message AirlineFilter { string icao = 1; int32 type = 2; }
+message FlightFilter { repeated AirlineFilter airlines = 3; }
+message SourceCount { DataSource source = 1; uint32 count = 2; }
+message FeedStats { repeated SourceCount total = 1; }
+enum DataSource {
+  ADSB = 0; MLAT = 1; FLARM = 2; FAA = 3; ESTIMATED = 4;
+  SATELLITE = 5; OTHER_DATA_SOURCE = 6; UAT = 7; SPIDERTRACKS = 8; AUS = 9;
+}
+message FeedSettings {
+  repeated DataSource sources = 1;
+  repeated int32 services = 2; // Numeric enum values in sr/g1.java, 0 through 11.
+  int32 trafficType = 3; // sr/m1.java: ALL=3.
+  bool onlyRestricted = 4;
+}
+message LiveFeedRequest {
+  Bounds bounds = 1;
+  FeedSettings settings = 2;
+  repeated FlightFilter filters = 3;
+  reserved 4;
+  bool highlightMode = 5;
+  bool stats = 6;
+  uint32 limit = 7;
+  uint32 maxage = 8;
+  reserved 9;
+  FieldMask fieldMask = 10;
+  repeated uint32 selectedFlightIds = 11;
+}
+message ExtraInfo {
+  string flight = 1;
+  string reg = 2;
+  Route route = 3;
+  string type = 4;
+  int32 squawk = 5;
+  int32 vspeed = 6;
+  string age = 7;
+  int32 countryOfReg = 8;
+  reserved 9;
+  int32 logoId = 10;
+  string airspace = 11;
+  reserved 12, 13;
+  uint32 icaoAddress = 14;
+  int32 operatedById = 15;
+  bool squawkAvailability = 16;
+  bool vspeedAvailability = 17;
+  bool airspaceAvailability = 18;
+  string airspaceId = 19;
+}
+message Flight {
+  uint32 flightId = 1;
+  float lat = 2;
+  float lon = 3;
+  int32 track = 4;
+  int32 alt = 5;
+  int32 speed = 6;
+  reserved 7, 8;
+  int64 timestamp = 9;
+  bool onGround = 10;
+  string callsign = 11;
+  DataSource source = 12;
+  ExtraInfo extraInfo = 13;
+  reserved 14;
+  int64 timestampMs = 15;
+}
+message LiveFeedResponse {
+  repeated Flight flights = 1;
+  FeedStats stats = 2;
+  repeated Flight selectedFlights = 3;
+  int64 serverTimeMs = 4;
+}

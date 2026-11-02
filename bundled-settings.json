@@ -1,0 +1,275 @@
+{
+  "urls": {
+    "about": "mobile.flightradar24.com/mobile/about/version/1",
+    "faq": "support.fr24.com/support/home",
+    "applyForReceiver": "mobile.flightradar24.com/mobile/apply-for-receiver",
+    "policy": "mobile.flightradar24.com/mobile/policy",
+    "terms": "mobile.flightradar24.com/mobile/terms",
+    "subscriptions": "mobile.flightradar24.com/mobile/subscriptions",
+    "features": "mobile.flightradar24.com/mobile/features",
+    "time": "mobile.flightradar24.com/mobile/gettime",
+    "static": "mobile.flightradar24.com/static",
+    "weather": "mobile.flightradar24.com/weather/auth",
+    "commercialServices": "mobile.flightradar24.com/mobile/commercial-services/overview",
+    "account": {
+      "login": "mobile.flightradar24.com/mobile/login",
+      "logout": "mobile.flightradar24.com/mobile/logout",
+      "userSession": "mobile.flightradar24.com/mobile/user-session",
+      "register": "mobile.flightradar24.com/user/register",
+      "facebook": "mobile.flightradar24.com/mobile/auth/?method=facebook&token=",
+      "googleplus": "mobile.flightradar24.com/mobile/auth/?method=googleplus&token=",
+      "apple": "mobile.flightradar24.com/mobile/auth/?method=apple&token=",
+      "passwordChange": "mobile.flightradar24.com/mobile/change",
+      "subscription": "mobile.flightradar24.com/mobile/subscribe",
+      "dataSharing": "mobile.flightradar24.com/account/data-sharing",
+      "billingDetails": "mobile.flightradar24.com/account/billing",
+      "customFleets": "mobile.flightradar24.com/account/fleets",
+      "feedStats": "mobile.flightradar24.com/account/feed-stats",
+      "passwordForgot": "mobile.flightradar24.com/mobile/forgot/format/json/?email=",
+      "delete": "mobile.flightradar24.com/mobile/delete"
+    },
+    "search": {
+      "freemium": "mobile.flightradar24.com/v1/search/web/find",
+      "airport": "api.flightradar24.com/common/v1/airport.json"
+    },
+    "feed": {
+      "planeList": "data-cloud.flightradar24.com/zones/fcgi/feed.js",
+      "planeDetail": "data-live.flightradar24.com/clickhandler",
+      "playback": "api.flightradar24.com/common/v1/flight-playback.json",
+      "flightValidatePlayback": "mobile.flightradar24.com/flights/validate",
+      "oceanicTracks": "mobile.flightradar24.com/json/tracks",
+      "airlineList": "mobile.flightradar24.com/mobile/airlines",
+      "airportList": "mobile.flightradar24.com/mobile/airports/format/4",
+      "aircraftList": "mobile.flightradar24.com/mobile/aircraft-family",
+      "history": "api.flightradar24.com/common/v1/flight/list.json",
+      "aircraftImages": "mobile.flightradar24.com/mobile/aircraft-images",
+      "download.csv": "mobile.flightradar24.com/csv",
+      "download.kml": "mobile.flightradar24.com/kml",
+      "airlineLogo": "api.flightradar24.com/common/v1/airline-logo.json",
+      "aircraftIcons": {
+        "sprite": "mobile.flightradar24.com/aircraft-icons/sprite",
+        "individual": "mobile.flightradar24.com/aircraft-icons/individual"
+      },
+      "airportsDelayStats": "mobile.flightradar24.com/airports/delay-stats/",
+      "getMostTrackedFlights": "mobile.flightradar24.com/flights/most-tracked",
+      "airportDisruptions": "mobile.flightradar24.com/webapi/v1/airport-disruptions"
+    },
+    "flights": {
+      "flightNumber": {
+        "byFlightId": "mobile.flightradar24.com/flights/get-flightnum-by-flightid"
+      }
+    },
+    "osx": {
+      "alerts": "mobile.flightradar24.com/mobile/register-alerts",
+      "support": "mobile.flightradar24.com/mobile/contact/version/1",
+      "3d": "mobile.flightradar24.com/mobile/3d",
+      "webview-3d": "mobile.flightradar24.com/mobile/webview-3d",
+      "liveActivity": "live-activity.flightradar24.com",
+      "promotionalSignature": "mobile.flightradar24.com/apple/promotional-signature",
+      "offerCheck": "mobile.flightradar24.com/apple/offer-check"
+    },
+    "android": {
+      "alerts": "mobile.flightradar24.com/mobile/android-alerts-v2",
+      "support": "mobile.flightradar24.com/mobile/contact/version/1",
+      "3d": "mobile.flightradar24.com/mobile/3d",
+      "webview-3d": "mobile.flightradar24.com/mobile/webview-3d",
+      "googleSubscriptionDetails": "mobile.flightradar24.com/user/googleSubscriptionDetails"
+    },
+    "layer": {
+      "weather": {
+        "volcanic": "mobile.flightradar24.com/weather/volcanic",
+        "airmetSigmet": "mobile.flightradar24.com/weather/airsigmetsbbox"
+      }
+    },
+    "quotaCheck": "mobile.flightradar24.com/download/check-quota",
+    "weatherStations": "mobile.flightradar24.com/weather/stations",
+    "myfr24": {
+      "topTravelers": "mobile.flightradar24.com/myfr24/topTravelers",
+      "onboard": "mobile.flightradar24.com/myfr24/onboard",
+      "fliers": "mobile.flightradar24.com/airports/myfr24-fliers"
+    },
+    "newsletter": {
+      "subscribe": "mobile.flightradar24.com/newsletter/subscribe",
+      "unsubscribe": "mobile.flightradar24.com/newsletter/unsubscribe",
+      "signup": "www.flightradar24.com/blog/newsletter-signup"
+    },
+    "geoip": "mobile.flightradar24.com/v1/search/web/geoip",
+    "webapi": "mobile.flightradar24.com/webapi/v1",
+    "waitingRoom": "free.flightradar24.com/mobile/gettime",
+    "filters": "mobile.flightradar24.com/webapi/v1/filters",
+    "api": "mobile.flightradar24.com/api/v1"
+  },
+  "providers": {
+    "satellite": [
+      {
+        "radar": "F-SAT1",
+        "name": "Spire",
+        "url": "mobile.flightradar24.com/contact-us/satellite-data?radar=F-SAT1&mode=mobile"
+      }
+    ]
+  },
+  "map": {
+    "refreshRateSeconds": 6,
+    "freeUserRefreshRateSeconds": 6,
+    "freeUserDebounce": 1,
+    "lapsedCoverageSeconds": 600,
+    "trailColourByMeters": [
+      [
+        0,
+        "ffffffff"
+      ],
+      [
+        100,
+        "ffe062ff"
+      ],
+      [
+        200,
+        "ffea00ff"
+      ],
+      [
+        300,
+        "f0ff00ff"
+      ],
+      [
+        400,
+        "ccff00ff"
+      ],
+      [
+        600,
+        "42ff00ff"
+      ],
+      [
+        800,
+        "1eff00ff"
+      ],
+      [
+        1000,
+        "00ff0cff"
+      ],
+      [
+        1200,
+        "00ff36ff"
+      ],
+      [
+        1500,
+        "00ff72ff"
+      ],
+      [
+        2000,
+        "00ff9cff"
+      ],
+      [
+        2500,
+        "00ffd2ff"
+      ],
+      [
+        3000,
+        "00ffe4ff"
+      ],
+      [
+        3500,
+        "00eaffff"
+      ],
+      [
+        4000,
+        "00c0ffff"
+      ],
+      [
+        4500,
+        "00a8ffff"
+      ],
+      [
+        5000,
+        "0096ffff"
+      ],
+      [
+        5500,
+        "0078ffff"
+      ],
+      [
+        6000,
+        "0054ffff"
+      ],
+      [
+        6500,
+        "0030ffff"
+      ],
+      [
+        7000,
+        "001effff"
+      ],
+      [
+        7500,
+        "0000ffff"
+      ],
+      [
+        8500,
+        "1200ffff"
+      ],
+      [
+        8500,
+        "2400ffff"
+      ],
+      [
+        9000,
+        "3600ffff"
+      ],
+      [
+        9500,
+        "4e00ffff"
+      ],
+      [
+        10000,
+        "6000ffff"
+      ],
+      [
+        10500,
+        "7800ffff"
+      ],
+      [
+        11000,
+        "9600ffff"
+      ],
+      [
+        11500,
+        "ae00ffff"
+      ],
+      [
+        12000,
+        "d800ffff"
+      ],
+      [
+        12500,
+        "ff00e4ff"
+      ],
+      [
+        13000,
+        "ff0000ff"
+      ]
+    ]
+  },
+  "misc": {
+    "osx": {
+      "proUpgradePromoActive": true
+    },
+    "android": {
+      "proUpgradePromoActive": true
+    }
+  },
+  "cache": {
+    "aircraftFamilyCacheTimestamp": 1741733358,
+    "airlineCacheTimestamp": 1760689147,
+    "airportCacheTimestamp": 1760818053,
+    "subscriptionCacheTimestamp": 1669195068,
+    "airlineLogosCacheTimestamp": 1758529265,
+    "aircraftIconsCacheTimestamp": 1658913471
+  },
+  "timestamp": 1760818053,
+  "terms_update_timestamp": 1619593200,
+  "grpc": {
+    "feed": {
+      "url": "data-feed.flightradar24.com",
+      "port": 443
+    }
+  }
+}

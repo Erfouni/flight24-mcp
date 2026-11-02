@@ -1,0 +1,307 @@
+{
+  "checkedAt": "2026-11-02T11:35:00Z",
+  "sources": [
+    "https://www.flightradar24.com/premium",
+    "https://www.flightradar24.com/",
+    "https://www.flightradar24.com/data/airports/dxb/arrivals",
+    "https://www.flightradar24.com/data/aircraft/g-xwbl"
+  ],
+  "goldLimits": {
+    "flightHistory": "365 days",
+    "aircraftHistory": "365 days",
+    "airportFlightHistory": "365 days",
+    "globalPlayback": "365 days",
+    "longerPlayback": "365 days",
+    "gpsJammingMap": "365 days",
+    "aircraftOnGround": "Last 30 days",
+    "csvKmlDownloads": "25 per day",
+    "liveArrivalsDepartures": "48 hours",
+    "bookmarks": 25,
+    "savedFilters": 25,
+    "alerts": 25,
+    "users": 1,
+    "sessions": 3,
+    "textLabels": 4,
+    "threeDView": "Unlimited",
+    "usageAllowed": "Personal",
+    "commercialApiIncluded": false
+  },
+  "businessDifferences": {
+    "flightAircraftAirportHistory": "3 years",
+    "globalPlayback": "3 years",
+    "gpsJammingMap": "3 years",
+    "aircraftOnGround": "Last 90 days",
+    "csvKmlDownloads": "60 per day",
+    "liveArrivalsDepartures": "72 hours",
+    "bookmarksSavedFiltersAlerts": 60,
+    "sessions": 4,
+    "customFleets": 3,
+    "usageAllowed": "Commercial and personal",
+    "commercialApiIncluded": false
+  },
+  "featureGroups": [
+    {
+      "group": "General",
+      "goldIncluded": [
+        "Remove ads & sidebar",
+        "Prioritized customer support",
+        "Remove timeout"
+      ],
+      "limits": [
+        "1 user",
+        "3 sessions",
+        "Personal use"
+      ]
+    },
+    {
+      "group": "Customization",
+      "goldIncluded": [
+        "Text labels",
+        "Save filters",
+        "Alerts",
+        "Create bookmarks",
+        "Last-clicked flights",
+        "Display flags",
+        "Aircraft logo and text"
+      ],
+      "businessOnly": [
+        "Customize fleet"
+      ]
+    },
+    {
+      "group": "Aircraft on map",
+      "goldIncluded": [
+        "Flight status",
+        "Track live flights"
+      ]
+    },
+    {
+      "group": "Aircraft details",
+      "goldIncluded": [
+        "Registration",
+        "ICAO 24-bit address",
+        "Aircraft type",
+        "Aircraft serial number",
+        "Aircraft age",
+        "Aircraft country of registration"
+      ]
+    },
+    {
+      "group": "Flight details",
+      "goldIncluded": [
+        "Ground speed",
+        "Position",
+        "Track",
+        "Barometric altitude",
+        "Vertical speed",
+        "Squawk code",
+        "GPS altitude",
+        "True airspeed",
+        "Indicated airspeed",
+        "Temperature",
+        "FIR/UIR",
+        "Mach",
+        "Wind speed and direction"
+      ],
+      "availabilityNote": "Permitted fields can still be N/A when not received; this was observed for speed/wind/temperature values on a live flight."
+    },
+    {
+      "group": "Airport details",
+      "goldIncluded": [
+        "Arrivals & departures",
+        "Airport & runway details",
+        "Latest events",
+        "Runway usage",
+        "Movements per day"
+      ]
+    },
+    {
+      "group": "Past flights",
+      "goldIncluded": [
+        "Flight history",
+        "Aircraft history",
+        "Airport flight history",
+        "Global playback",
+        "Access longer playback",
+        "Aircraft on ground",
+        "Download CSV/KML files"
+      ],
+      "businessOnly": [
+        "Historical flight runway"
+      ]
+    },
+    {
+      "group": "Map layers",
+      "goldIncluded": [
+        "ATC boundaries",
+        "Oceanic tracks",
+        "Aeronautical Charts"
+      ]
+    },
+    {
+      "group": "Map views",
+      "goldIncluded": [
+        "Delay view",
+        "Multi-select view",
+        "Full-screen view",
+        "Enable 3D view",
+        "Enable list view"
+      ],
+      "businessOnly": [
+        "Airport view",
+        "Access fleet view"
+      ]
+    },
+    {
+      "group": "Aviation data",
+      "goldIncluded": [
+        "Airport disruptions",
+        "Flight tracking statistics",
+        "GPS jamming map"
+      ]
+    },
+    {
+      "group": "Weather layers",
+      "goldIncluded": [
+        "Volcanic eruption",
+        "Current weather",
+        "Cloud",
+        "Total precipitation",
+        "Intense precipitation",
+        "Australian radar",
+        "North American radar"
+      ],
+      "businessOnly": [
+        "High-level significant weather",
+        "Lightning",
+        "Winds layer",
+        "AIRMETs/SIGMETs",
+        "Hi-res turbulence",
+        "High-res icing"
+      ]
+    }
+  ],
+  "visibleActions": {
+    "mainMap": [
+      "Search flights, airports and more",
+      "Zoom",
+      "Additional map controls",
+      "View selection",
+      "Settings",
+      "Weather",
+      "Filters",
+      "Widgets",
+      "Playback",
+      "Most tracked flights",
+      "Airport disruptions",
+      "Bookmarks"
+    ],
+    "aviationDataMenu": [
+      "Airports",
+      "Airlines",
+      "Aircraft",
+      "Flights",
+      "Pinned flights",
+      "Search",
+      "Flight tracking statistics",
+      "Airport disruption map",
+      "GPS jamming map"
+    ],
+    "otherNavigation": [
+      "Email alerts",
+      "Subscription plans",
+      "Add coverage",
+      "Flight data & API",
+      "Press & media center",
+      "About",
+      "MyFR24 flight logbook",
+      "JetPhotos",
+      "Forum",
+      "Skycards"
+    ],
+    "categoryFilters": [
+      "Passenger",
+      "Cargo",
+      "Military or government",
+      "Business jets",
+      "General aviation",
+      "Helicopter",
+      "Lighter-than-air",
+      "Gliders",
+      "Drones",
+      "Ground vehicles",
+      "Other",
+      "Non-categorized"
+    ],
+    "customFilterFamilies": [
+      "Airline",
+      "Aircraft",
+      "Airport",
+      "Route",
+      "Categories",
+      "Advanced"
+    ],
+    "advancedFilterFields": [
+      "Call sign",
+      "Registration",
+      "Squawk",
+      "Ground speed",
+      "Barometric altitude",
+      "Aircraft age",
+      "Radar"
+    ],
+    "flightPanel": [
+      "Aircraft details",
+      "Reported category",
+      "Scheduled, actual and estimated times separately",
+      "Source and coordinates",
+      "Recent aircraft flights",
+      "Flight-number history",
+      "Speed & altitude graph",
+      "3D view",
+      "Route",
+      "Follow",
+      "Share",
+      "More",
+      "Playback",
+      "Hide other aircraft",
+      "Airline, aircraft and airport links"
+    ],
+    "aircraftHistoryRows": [
+      "Load earlier flights",
+      "Per-flight KML button",
+      "Per-flight CSV button",
+      "Play completed flight",
+      "Live active flight",
+      "Share future scheduled flight"
+    ],
+    "airportSections": [
+      "General",
+      "Departures",
+      "Arrivals",
+      "On ground",
+      "Weather",
+      "Routes",
+      "Reviews",
+      "Statistics"
+    ],
+    "airportBoard": [
+      "Date",
+      "Previous/next day",
+      "Earlier/later time",
+      "Earlier/later flights",
+      "Flight/airline/aircraft links",
+      "Codeshare indicators",
+      "Statuses",
+      "Gate if available",
+      "Runway restricted to Business",
+      "Delayed/canceled period selection"
+    ]
+  },
+  "limitations": [
+    "Plan inclusion is not proof of a working backend adapter.",
+    "Provide your own authorized provider session and credentials.",
+    "Not all website UI controls are MCP tools.",
+    "Historical cargo classification and complete traffic census remain unverified."
+  ]
+}
