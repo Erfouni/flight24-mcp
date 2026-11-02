@@ -1,6 +1,6 @@
 import {createHash,randomUUID} from 'node:crypto';
 import {mkdir,lstat,realpath,readdir,open,rename,unlink} from 'node:fs/promises';
-import {resolve,join,isAbsolute} from 'node:path';
+import {resolve,join,isAbsolute,dirname} from 'node:path';
 import {ClientError} from './session.mjs';
 
 const STORE_BYTES=64*1024*1024,DOWNLOAD_BYTES=4*1024*1024;
@@ -13,6 +13,17 @@ const storage=()=>fail('HISTORY_JOBS_STORE_UNAVAILABLE','The private history job
 const iso=value=>new Date(value).toISOString();
 const safeCode=value=>typeof value==='string'&&(/^HTTP_[1-5]\d{2}$/.test(value)||['INTERACTION_REQUIRED','AIRPORT_TIMEZONE_UNAVAILABLE','AIRPORT_EVENTS_BAD_RESPONSE','AIRPORT_EVENTS_NOT_CONFIGURED','AIRPORT_EVENTS_SESSION_INVALID','AIRPORT_EVENTS_NETWORK_FAILED','SOURCE_FAILED','HISTORY_JOBS_RECORD_LIMIT','HISTORY_JOBS_STORE_UNAVAILABLE'].includes(value))?value:'SOURCE_FAILED';
 const terminalCode=code=>code==='HTTP_401'||code==='HTTP_403'||code==='INTERACTION_REQUIRED'||code==='AIRPORT_TIMEZONE_UNAVAILABLE'||code==='AIRPORT_EVENTS_NOT_CONFIGURED'||code==='AIRPORT_EVENTS_SESSION_INVALID';
+async function assertDirectoryAncestors(directory,{allowMissing=false}={}){
+  const paths=[];
+  for(let path=directory;;path=dirname(path)){paths.push(path);if(dirname(path)===path)break;}
+  for(const path of paths.reverse()){
+    // Node reports EISDIR for an extended-namespace drive root. Its ordinary
+    // drive spelling refers to that same root; children are still checked.
+    const inspected=process.platform==='win32'&&/^\\\\\?\\[A-Za-z]:\\$/.test(path)?path.slice(4):path;
+    let stat;try{stat=await lstat(inspected);}catch(error){if(allowMissing&&error.code==='ENOENT')return;throw error;}
+    if(stat.isSymbolicLink()||!stat.isDirectory())throw storage();
+  }
+}
 
 /** Serial, durable observations. Completed means the request plan finished,
  * never that the provider supplied a complete traffic census or cargo count. */
@@ -41,10 +52,13 @@ export class RegionalHistoryJobs{
   }
   async #load(){
     try{
+      // Inspect links themselves before creating anything. A short Windows
+      // filename or namespace alias is legitimate and is not a symbolic link.
+      await assertDirectoryAncestors(this.#directory,{allowMissing:true});
       await mkdir(this.#directory,{recursive:true,mode:0o700});
-      const stat=await lstat(this.#directory);if(stat.isSymbolicLink()||!stat.isDirectory())throw storage();
-      const actual=await realpath(this.#directory);
-      if(actual.toLowerCase()!==this.#directory.toLowerCase())throw storage();
+      await assertDirectoryAncestors(this.#directory);
+      this.#directory=await realpath(this.#directory);
+      await assertDirectoryAncestors(this.#directory);
       const entries=(await readdir(this.#directory)).filter(name=>/^[a-f0-9]{32}\.json$/.test(name));
       if(entries.length>this.#maxJobs)throw storage();
       for(const name of entries){

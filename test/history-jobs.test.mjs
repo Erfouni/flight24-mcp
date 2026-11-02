@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,rm,readdir,readFile,symlink} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
-import {join} from 'node:path';
+import {join,toNamespacedPath} from 'node:path';
+import {execFileSync} from 'node:child_process';
 import {RegionalAirportEventsService} from '../regional-airport-events.mjs';
 const {RegionalHistoryJobs}=await import('../history-jobs.mjs').catch(e=>{if(e.code==='ERR_MODULE_NOT_FOUND')return {};throw e;});
 const query={selection:{airports:['ONE']},fromDate:'2026-10-01',toDate:'2026-10-02',eventType:'landed'};
@@ -84,4 +85,29 @@ test('job bounds, strict IDs and paginated download inputs fail without provider
 
 test('symlinked storage is rejected before any job or provider request',async()=>temporary(async(storeDir,own)=>{
   const link=storeDir+'-link';try{await symlink(storeDir,link,process.platform==='win32'?'junction':'dir');const jobs=new RegionalHistoryJobs({regionalAirportEvents:region(async()=>{throw Error('not called');}),storeDir:link});own(jobs);await assert.rejects(jobs.initialize(),e=>e.code==='HISTORY_JOBS_STORE_UNAVAILABLE');}finally{await rm(link,{force:true});}
+}));
+
+test('legitimate Windows namespace aliases initialize and write to the canonical private directory',{skip:process.platform!=='win32'},async()=>temporary(async(storeDir,own)=>{
+  const jobs=new RegionalHistoryJobs({regionalAirportEvents:region(async({date})=>reply(date)),storeDir:toNamespacedPath(storeDir),paceMs:0});own(jobs);
+  const started=await jobs.start(query);await until(()=>jobs.get(started.jobId),j=>j.status==='completed');
+  assert.ok((await readdir(storeDir)).includes(started.jobId+'.json'));
+}));
+
+test('legitimate Windows 8.3 directory aliases work when short names are available',{skip:process.platform!=='win32'},async t=>temporary(async(storeDir,own)=>{
+  let alias;
+  try{alias=execFileSync('powershell.exe',['-NoProfile','-NonInteractive','-Command',"$fso = New-Object -ComObject Scripting.FileSystemObject; $fso.GetFolder($env:HISTORY_JOB_ALIAS_TARGET).ShortPath"],{encoding:'utf8',env:{...process.env,HISTORY_JOB_ALIAS_TARGET:storeDir},windowsHide:true}).trim();}
+  catch{t.skip('Windows short-path lookup is unavailable');return;}
+  if(!alias||alias.toLowerCase()===storeDir.toLowerCase()){t.skip('This volume does not expose an 8.3 alias for the fixture');return;}
+  const jobs=new RegionalHistoryJobs({regionalAirportEvents:region(async({date})=>reply(date)),storeDir:alias,paceMs:0});own(jobs);
+  const started=await jobs.start(query);await until(()=>jobs.get(started.jobId),j=>j.status==='completed');
+  assert.ok((await readdir(storeDir)).includes(started.jobId+'.json'));
+}));
+
+test('a linked ancestor cannot hide behind a regular final storage directory',async()=>temporary(async(storeDir,own)=>{
+  const link=storeDir+'-ancestor';try{
+    await symlink(storeDir,link,process.platform==='win32'?'junction':'dir');
+    const jobs=new RegionalHistoryJobs({regionalAirportEvents:region(async()=>{throw Error('not called');}),storeDir:join(link,'child')});own(jobs);
+    await assert.rejects(jobs.initialize(),e=>e.code==='HISTORY_JOBS_STORE_UNAVAILABLE');
+    assert.ok(!(await readdir(storeDir)).includes('child'));
+  }finally{await rm(link,{force:true});}
 }));
