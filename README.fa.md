@@ -1,6 +1,6 @@
 <div dir="rtl">
 
-# Live Transport MCP
+# Flight24 MCP
 
 [English](README.md) · **فارسی**
 
@@ -87,7 +87,7 @@ OAuth مالک اختیاری است. `PUBLIC_URL` را روی مبدأ HTTPS خ
 
 دسترسی منابع می‌تواند تغییر کند. ثبت ابزار به معنی در دسترس‌بودن، بازبودن یا کامل‌بودن منبع آن نیست؛ پاسخ واقعی ابزار را بررسی کنید. این پروژه ادعا نمی‌کند که همهٔ امکانات گرافیکی وب‌سایت Gold به ابزار MCP تبدیل شده‌اند.
 
-[مخزن پروژه](https://github.com/Erfouni/live-transport-mcp) · توسعه‌دهنده: **Erfouni**
+[مخزن پروژه](https://github.com/Erfouni/flight24-mcp) · توسعه‌دهنده: **Erfouni**
 
 </div>
 

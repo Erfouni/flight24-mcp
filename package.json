@@ -1,5 +1,5 @@
 {
-  "name": "live-transport-mcp",
+  "name": "flight24-mcp",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -26,10 +26,10 @@
   "description": "Source-backed flight, vessel and satellite MCP tools with resumable history batches",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Erfouni/live-transport-mcp.git"
+    "url": "https://github.com/Erfouni/flight24-mcp.git"
   },
-  "homepage": "https://github.com/Erfouni/live-transport-mcp",
+  "homepage": "https://github.com/Erfouni/flight24-mcp",
   "bugs": {
-    "url": "https://github.com/Erfouni/live-transport-mcp/issues"
+    "url": "https://github.com/Erfouni/flight24-mcp/issues"
   }
 }

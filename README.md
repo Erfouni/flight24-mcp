@@ -1,4 +1,4 @@
-# Live Transport MCP
+# Flight24 MCP
 
 **English** · [فارسی](README.fa.md)
 
@@ -73,7 +73,7 @@ This repository contains application code and a factual public airport reference
 
 Provider availability can change. A tool may be registered while its source is blocked, locked, unavailable or incomplete; inspect its actual response. The project does not claim that every graphical Gold website feature is implemented as an MCP tool.
 
-[Repository](https://github.com/Erfouni/live-transport-mcp) · Developer: **Erfouni**
+[Repository](https://github.com/Erfouni/flight24-mcp) · Developer: **Erfouni**
 
 ### Batch example
 
