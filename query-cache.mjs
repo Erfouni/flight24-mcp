@@ -1,5 +1,5 @@
 const HISTORICAL_TOOLS=new Set(['get_aircraft_history','get_aircraft_track','get_vessel_history','get_vessel_details','get_track_statistics','search_satellite_scenes','resolve_region_airports']);
-export const ttlForTool=name=>['get_capabilities','start_region_history_job','get_region_history_job'].includes(name)?0:HISTORICAL_TOOLS.has(name)?60000:15000;
+export const ttlForTool=name=>['get_capabilities','start_region_history_job','get_region_history_job','analyze_region_history_job'].includes(name)?0:HISTORICAL_TOOLS.has(name)?60000:15000;
 export class QueryCache {
   constructor({clock=Date.now,maxEntries=64,maxBytes=8000000}={}){this.clock=clock;this.maxEntries=maxEntries;this.maxBytes=maxBytes;this.bytes=0;this.entries=new Map();}
   drop(key){const old=this.entries.get(key);if(old){this.bytes-=old.bytes;this.entries.delete(key);}}

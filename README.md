@@ -4,7 +4,7 @@
 
 A self-hosted MCP server for source-backed aircraft and vessel observations, available route history, airport events and dated satellite imagery. Developed by **Erfouni**.
 
-The server uses MCP Streamable HTTP at `/mcp`. Tool availability depends on configured providers: up to 27 tools are available with all existing providers configured, with up to 30 when the three optional regional history job tools are enabled. A running server does not automatically provide authenticated Gold history or satellite access.
+The server uses MCP Streamable HTTP at `/mcp`. Tool availability depends on configured providers: up to 27 tools are available with all existing providers configured, with up to 31 when the four optional regional archive tools are enabled. A running server does not automatically provide authenticated Gold history or satellite access.
 
 ## Capabilities
 
@@ -15,7 +15,7 @@ The server uses MCP Streamable HTTP at `/mcp`. Tool availability depends on conf
 | Vessels | Search, last AIS position, available history, particulars and area counts/lists | Last report time is preserved; silence does not establish absence |
 | Track files | Statistics, CSV/KML from supplied observations, optional original provider downloads | Derived exports and original provider files remain distinct |
 | Satellite | Copernicus scene search and true-colour images | Dated acquisitions with cloud and resolution limits, not live video |
-| Regional jobs | `start_region_history_job`, `get_region_history_job`, `download_region_history_job` | Optional queued, resumable archive workflow |
+| Regional jobs | `start_region_history_job`, `get_region_history_job`, `download_region_history_job`, `analyze_region_history_job` | Optional queued, resumable archive workflow |
 
 Every result should be read with its report time, freshness, coverage and failure fields. Partial observations are not complete traffic totals. Historical cargo classification can be unavailable: exact cargo counts remain unknown rather than being inferred from aircraft type. Broad tanker classes do not verify oil cargo. A regional airport query counts events at selected airports, not overflights or all traffic in that region.
 
@@ -83,3 +83,7 @@ Provider availability can change. A tool may be registered while its source is b
 4. Reuse the same query to reuse its job. After resolving a failed job's cause, explicitly set `resumeFailed: true` on the start call to continue its checkpoint.
 
 Default bounds are 20 jobs, 10,000 airport/day requests per plan, 100,000 records per job and 4 MiB per downloaded page. These are local safety limits, not published provider quotas. Two DPAPI integration tests run only on Windows; other tests run on Windows and Linux.
+
+### Analyze locally in one call
+
+Use `analyze_region_history_job` with `jobId`, optional exact `aircraftTypes`, optional `originFilter: {"mode":"outside","selection":{"country":"AE"}}`, and `groupBy: "aircraftType"` (also `originCountry` or `airlineId`). It returns compact counts from one consistent stored snapshot with zero provider requests. Unknown origins remain separate and are never classified as outside. Aircraft type alone does not establish cargo role or aircraft nationality.

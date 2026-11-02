@@ -2,6 +2,7 @@ import {createHash,randomUUID} from 'node:crypto';
 import {mkdir,lstat,realpath,readdir,open,rename,unlink} from 'node:fs/promises';
 import {resolve,join,isAbsolute,dirname} from 'node:path';
 import {ClientError} from './session.mjs';
+import {analyzeHistoryRecords} from './history-analysis.mjs';
 
 const STORE_BYTES=64*1024*1024,DOWNLOAD_BYTES=4*1024*1024;
 const ID=/^[a-f0-9]{32}$/;
@@ -11,8 +12,8 @@ const fail=(code,message)=>new ClientError(code,message);
 const input=()=>fail('HISTORY_JOB_INPUT_INVALID','Provide a valid history job ID and bounded dataset page');
 const storage=()=>fail('HISTORY_JOBS_STORE_UNAVAILABLE','The private history job store is unavailable or invalid');
 const iso=value=>new Date(value).toISOString();
-const safeCode=value=>typeof value==='string'&&(/^HTTP_[1-5]\d{2}$/.test(value)||['INTERACTION_REQUIRED','AIRPORT_TIMEZONE_UNAVAILABLE','AIRPORT_EVENTS_BAD_RESPONSE','AIRPORT_EVENTS_NOT_CONFIGURED','AIRPORT_EVENTS_SESSION_INVALID','AIRPORT_EVENTS_NETWORK_FAILED','SOURCE_FAILED','HISTORY_JOBS_RECORD_LIMIT','HISTORY_JOBS_STORE_UNAVAILABLE'].includes(value))?value:'SOURCE_FAILED';
-const terminalCode=code=>code==='HTTP_401'||code==='HTTP_403'||code==='INTERACTION_REQUIRED'||code==='AIRPORT_TIMEZONE_UNAVAILABLE'||code==='AIRPORT_EVENTS_NOT_CONFIGURED'||code==='AIRPORT_EVENTS_SESSION_INVALID';
+const safeCode=value=>typeof value==='string'&&(/^HTTP_[1-5]\d{2}$/.test(value)||['INTERACTION_REQUIRED','AIRPORT_TIMEZONE_UNAVAILABLE','AIRPORT_EVENTS_BAD_RESPONSE','AIRPORT_EVENTS_NOT_CONFIGURED','AIRPORT_EVENTS_SESSION_INVALID','AIRPORT_EVENTS_NETWORK_FAILED','AIRPORT_EVENTS_QUEUE_FULL','AIRPORT_EVENTS_CACHE_FAILED','AIRPORT_EVENTS_CACHE_UNSAFE','SOURCE_FAILED','HISTORY_JOBS_RECORD_LIMIT','HISTORY_JOBS_STORE_UNAVAILABLE'].includes(value))?value:'SOURCE_FAILED';
+const terminalCode=code=>['HTTP_401','HTTP_403','INTERACTION_REQUIRED','AIRPORT_TIMEZONE_UNAVAILABLE','AIRPORT_EVENTS_NOT_CONFIGURED','AIRPORT_EVENTS_SESSION_INVALID','AIRPORT_EVENTS_CACHE_FAILED','AIRPORT_EVENTS_CACHE_UNSAFE'].includes(code);
 async function assertDirectoryAncestors(directory,{allowMissing=false}={}){
   const paths=[];
   for(let path=directory;;path=dirname(path)){paths.push(path);if(dirname(path)===path)break;}
@@ -109,6 +110,17 @@ export class RegionalHistoryJobs{
     this.#startTail=task.catch(()=>{});return task;
   }
   async get(jobId){await this.initialize();if(typeof jobId!=='string'||!ID.test(jobId))throw input();const job=this.#jobs.get(jobId);if(!job)throw fail('HISTORY_JOB_NOT_FOUND','The history job does not exist');return this.#summary(job);}
+  async analyze(args){
+    if(!args||typeof args!=='object'||Array.isArray(args)||Object.keys(args).some(key=>!['jobId','aircraftTypes','originFilter','groupBy','maxGroups'].includes(key)))throw input();
+    const {jobId,...options}=args;
+    await this.initialize();
+    if(typeof jobId!=='string'||!ID.test(jobId))throw input();
+    // Worker checkpoints replace job objects; capture exactly one existing
+    // object so records and progress cannot come from different revisions.
+    const job=this.#jobs.get(jobId);
+    if(!job)throw fail('HISTORY_JOB_NOT_FOUND','The history job does not exist');
+    return analyzeHistoryRecords({...options,records:job.records,job:this.#summary(job)});
+  }
   async download({jobId,offset=0,limit=1000,...extra}={}){
     if(Object.keys(extra).length||!Number.isSafeInteger(offset)||offset<0||!Number.isInteger(limit)||limit<1||limit>1000)throw input();
     await this.get(jobId);const job=this.#jobs.get(jobId),metadata={...this.#summary(job),offset,requestedLimit:limit,format:'application/json'};

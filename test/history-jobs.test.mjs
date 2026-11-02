@@ -83,6 +83,29 @@ test('job bounds, strict IDs and paginated download inputs fail without provider
   for(const bad of [{offset:-1},{limit:1001},{limit:0}])await assert.rejects(jobs.download({jobId:started.jobId,...bad}),e=>e.code==='HISTORY_JOB_INPUT_INVALID');
 }));
 
+test('archive analysis uses one existing snapshot and returns compact counts without new provider reads',async()=>temporary(async(storeDir,own)=>{
+  let calls=0;const jobs=new RegionalHistoryJobs({regionalAirportEvents:region(async({date})=>{calls++;const result=reply(date);result.records[0].aircraftType='B744';return result;}),storeDir,paceMs:0});own(jobs);
+  const started=await jobs.start(query);const queued=await jobs.analyze({jobId:started.jobId});
+  assert.equal(queued.inputRecordCount,0);assert.equal(calls,0);
+  const done=await until(()=>jobs.get(started.jobId),j=>j.status==='completed');
+  const result=await jobs.analyze({jobId:started.jobId,aircraftTypes:['B744'],groupBy:'aircraftType',maxGroups:1});
+  assert.equal(calls,2);assert.equal(result.observedMatchingEvents,2);assert.equal(result.snapshot.updatedAt,done.updatedAt);
+  assert.equal(result.snapshot.progress.completedRequestCount,2);assert.equal(result.groups[0].key,'B744');
+  assert.equal(result.records,undefined);assert.equal(result.complete,false);assert.equal(result.exactCargoArrivalCount,null);
+  await assert.rejects(jobs.analyze({jobId:'../invalid'}),e=>e.code==='HISTORY_JOB_INPUT_INVALID');
+  await assert.rejects(jobs.analyze({jobId:started.jobId,records:[]}),e=>e.code==='HISTORY_JOB_INPUT_INVALID');
+}));
+
+test('queue errors remain retryable while cache failures require explicit repair and resumption',async()=>temporary(async(storeDir,own)=>{
+  let code='AIRPORT_EVENTS_QUEUE_FULL',calls=0;
+  const jobs=new RegionalHistoryJobs({regionalAirportEvents:region(async()=>{calls++;throw Object.assign(Error('private'),{code,retryAfterSeconds:60});}),storeDir,paceMs:0});own(jobs);
+  const started=await jobs.start(query);const waiting=await until(()=>jobs.get(started.jobId),j=>j.status==='waiting');
+  assert.equal(waiting.lastErrorCode,code);assert.equal(calls,1);await jobs.close();
+  const other=new RegionalHistoryJobs({regionalAirportEvents:region(async()=>{calls++;throw Object.assign(Error('private'),{code:'AIRPORT_EVENTS_CACHE_UNSAFE'});}),storeDir:join(storeDir,'cache-failure'),paceMs:0});own(other);
+  const broken=await other.start(query);const failed=await until(()=>other.get(broken.jobId),j=>j.status==='partial_failed');
+  assert.equal(failed.lastErrorCode,'AIRPORT_EVENTS_CACHE_UNSAFE');assert.equal(failed.progress.attemptsAtCheckpoint,1);assert.equal(failed.nextOffset,0);assert.equal(calls,2);
+}));
+
 test('symlinked storage is rejected before any job or provider request',async()=>temporary(async(storeDir,own)=>{
   const link=storeDir+'-link';try{await symlink(storeDir,link,process.platform==='win32'?'junction':'dir');const jobs=new RegionalHistoryJobs({regionalAirportEvents:region(async()=>{throw Error('not called');}),storeDir:link});own(jobs);await assert.rejects(jobs.initialize(),e=>e.code==='HISTORY_JOBS_STORE_UNAVAILABLE');}finally{await rm(link,{force:true});}
 }));

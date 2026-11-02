@@ -46,6 +46,13 @@ test('all failures preserve the unprocessed checkpoint and interaction requireme
   assert.equal(result.unqueriedRequests.length,3);assert.ok(!JSON.stringify(result).includes('secret'));
 });
 
+test('local queue and cache errors retain safe classifications without leaking filesystem details',async()=>{
+  for(const code of ['AIRPORT_EVENTS_QUEUE_FULL','AIRPORT_EVENTS_CACHE_FAILED','AIRPORT_EVENTS_CACHE_UNSAFE']){
+    const result=await service(async()=>{throw Object.assign(Error('private-path'),{code,retryAfterSeconds:5});}).getRegionalAirportEvents({...q,maxRequests:4});
+    assert.equal(result.failures[0].code,code);assert.equal(result.nextOffset,0);assert.equal(result.retryAfterSeconds,5);assert.ok(!JSON.stringify(result).includes('private-path'));
+  }
+});
+
 test('planning validates and pins a deterministic airport selection without fetching provider data',()=>{
   const instance=service(()=>{throw Error('no request allowed');});
   const plan=instance.describeRegionalAirportEvents(q);

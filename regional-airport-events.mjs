@@ -12,7 +12,7 @@ function instant(value){
   if(typeof value!=='string'||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/.test(value))return NaN;
   const ms=Date.parse(value);return Number.isFinite(ms)&&new Date(ms).toISOString().slice(0,19)===value.slice(0,19)?ms:NaN;
 }
-function safeCode(error){const code=error?.code;return typeof code==='string'&&(/^HTTP_[1-5]\d{2}$/.test(code)||['INTERACTION_REQUIRED','AIRPORT_TIMEZONE_UNAVAILABLE','AIRPORT_EVENTS_BAD_RESPONSE','AIRPORT_EVENTS_NOT_CONFIGURED','AIRPORT_EVENTS_SESSION_INVALID','AIRPORT_EVENTS_NETWORK_FAILED'].includes(code))?code:'SOURCE_FAILED';}
+function safeCode(error){const code=error?.code;return typeof code==='string'&&(/^HTTP_[1-5]\d{2}$/.test(code)||['INTERACTION_REQUIRED','AIRPORT_TIMEZONE_UNAVAILABLE','AIRPORT_EVENTS_BAD_RESPONSE','AIRPORT_EVENTS_NOT_CONFIGURED','AIRPORT_EVENTS_SESSION_INVALID','AIRPORT_EVENTS_NETWORK_FAILED','AIRPORT_EVENTS_QUEUE_FULL','AIRPORT_EVENTS_CACHE_FAILED','AIRPORT_EVENTS_CACHE_UNSAFE'].includes(code))?code:'SOURCE_FAILED';}
 function safeRetry(error){return {retryAt:Number.isFinite(instant(error?.retryAt))?new Date(error.retryAt).toISOString():null,retryAfterSeconds:Number.isSafeInteger(error?.retryAfterSeconds)&&error.retryAfterSeconds>=0?error.retryAfterSeconds:null};}
 function localDate(formatter,ms){const parts=Object.fromEntries(formatter.formatToParts(ms).map(p=>[p.type,p.value]));return parts.year+'-'+parts.month+'-'+parts.day;}
 const airportInfo=a=>({id:a.id,iata:a.iata??null,icao:a.icao??null,name:a.name??null,timezone:a.timezone??null});
